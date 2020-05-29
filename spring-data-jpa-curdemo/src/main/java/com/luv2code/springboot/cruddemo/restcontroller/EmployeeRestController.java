@@ -36,7 +36,10 @@ public class EmployeeRestController {
 	@GetMapping("/employeeId/{employeeId}")
 	public EntityModel<Employee> findEmployee(@PathVariable int employeeId) {
 		Employee theEmployee = employeeService.findId(employeeId);
-		// retrieve all users 
+		
+		// retrieve all users
+		// HATEOAS
+		
 		EntityModel<Employee> model = new EntityModel<>(theEmployee);
 		 
 		WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).getEmployees());
