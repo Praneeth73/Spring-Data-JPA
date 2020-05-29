@@ -2,7 +2,12 @@ package com.luv2code.springboot.cruddemo.restcontroller;
 
 import java.util.List;
 
+
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.server.mvc.ControllerLinkBuilder;
+import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,9 +34,17 @@ public class EmployeeRestController {
 	}
 
 	@GetMapping("/employeeId/{employeeId}")
-	public Employee findEmployee(@PathVariable int employeeId) {
+	public EntityModel<Employee> findEmployee(@PathVariable int employeeId) {
 		Employee theEmployee = employeeService.findId(employeeId);
-		return theEmployee;
+		// retrieve all users 
+		EntityModel<Employee> model = new EntityModel<>(theEmployee);
+		 
+		WebMvcLinkBuilder linkTo = WebMvcLinkBuilder.linkTo(ControllerLinkBuilder.methodOn(this.getClass()).getEmployees());
+	 
+		model.add(linkTo.withRel("all-Empoyees"));
+	 
+		return model;
+		
 	}
 
 	@PostMapping("/newemployee")
